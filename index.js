@@ -2,11 +2,15 @@ const express = require("express");
 const mongoose = require("mongoose");
 const Product = require("./models/products_models.js");
 const productRoute = require("./routes/products_routes.js");
+const path = require('path'); // Import path module
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+
+// Serve static files (HTML, CSS, JavaScript)
+app.use(express.static(path.join(__dirname, 'public')));
 // routes
 
 app.use("/api/products", productRoute);
@@ -14,9 +18,13 @@ app.use("/api/products", productRoute);
 //app.listen(4850, () => {
 //   console.log("server lstion 4850 port");
 //})
-
+/*
 app.get("/", (req, res) => {
   res.send("hello from Node api js server");
+});
+*/
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html')); // Send the HTML file
 });
 
 /*
