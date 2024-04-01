@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Product Management</title>
+<link rel="stylesheet" href="styles.css"> <!-- Link to external CSS file -->
 </head>
 <body>
 
@@ -18,161 +19,16 @@
   <input type="number" id="qty" name="qty" required><br>
   <label for="price">Price:</label><br>
   <input type="number" id="price" name="price" required><br>
-  <button type="submit">Add Product</button>
-</form>
+  <button type="submit" id="addButton">Add Product</button>
 
-<!-- Form to Update Product -->
-<h2>Update Product</h2>
-<form id="updateProductForm">
-  <label for="_id">Product ID to Update:</label><br>
-  <input type="text" id="_id" name="_id" required><br>
-  <label for="name">New Product Name:</label><br>
-  <input type="text" id="name" name="name" required><br>
-  <label for="qty">New Quantity:</label><br>
-  <input type="number" id="qty" name="qty" required><br>
-  <label for="price">New Price:</label><br>
-  <input type="number" id="price" name="price" required><br>
-  <button type="submit">Update Product</button>
-</form>
-
-<!-- Form to Delete Product -->
-<h2>Delete Product</h2>
-<form id="deleteProductForm">
-  <label for="deleteId">Product ID to Delete:</label><br>
-  <input type="text" id="deleteId" name="deleteId" required><br>
-  <button type="submit">Delete Product</button>
+  <button type="button" id="updateButton" disabled>Update Product</button>
 </form>
 
 <!-- Display All Products -->
 <h2>All Products</h2>
 <ul id="productList"></ul>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const addProductForm = document.getElementById('addProductForm');
-  const updateProductForm = document.getElementById('updateProductForm');
-  const deleteProductForm = document.getElementById('deleteProductForm');
-  const productList = document.getElementById('productList');
-
-  const fetchProducts = async () => {
-  try {
-    const response = await fetch('/api/products');
-    const data = await response.json();
-    productList.innerHTML = '';
-    data.forEach(product => {
-      const li = document.createElement('li');
-      li.textContent = `ID: ${product._id} - ${product.name} - Quantity: ${product.qty} - Price: ${product.price}`;
-      productList.appendChild(li);
-    });
-  } catch (error) {
-    console.error('Error fetching products:', error);
-  }
-};
-
-  // Function to add product
-  addProductForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const formData = new FormData(addProductForm);
-    await fetch('/api/products', {
-      method: 'POST',
-      body: JSON.stringify(Object.fromEntries(formData)),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    addProductForm.reset();
-    fetchProducts();
-  });
-
-  /* 
-  // Function to update product
-updateProductForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const formData = new FormData(updateProductForm);
-  const updateId = formData.get('updateId');
-  
-  console.log('Updating product with ID:', updateId);
-  console.log('Form Data:', Object.fromEntries(formData));
-
-  try {
-    const response = await fetch(`/api/products/${updateId}`, {
-      method: 'PUT',
-      body: JSON.stringify(Object.fromEntries(formData)),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-
-    // Log response status
-    console.log('Response Status:', response.status);
-
-    // Log response data
-    const responseData = await response.json();
-    console.log('Update Response:', responseData);
-    
-    // Reset form and fetch updated products
-    updateProductForm.reset();
-    fetchProducts();
-  } catch (error) {
-    console.error('Error updating product:', error);
-  }
-});
-
-*/
-
-// Function to update product
-updateProductForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const formData = new FormData(updateProductForm);
-  const updateId = formData.get('_id'); // Retrieve ID from _id field
-  const updateName = formData.get('name'); // Retrieve updated name
-  const updateQty = formData.get('qty'); // Retrieve updated quantity
-  const updatePrice = formData.get('price'); // Retrieve updated price
-  
-  console.log('Updating product with ID:', updateId);
-  console.log('Form Data:', { updateId, updateName, updateQty, updatePrice });
-
-  try {
-    const response = await fetch(`/api/products/${updateId}`, {
-      method: 'PUT',
-      body: JSON.stringify({ name: updateName, qty: updateQty, price: updatePrice }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-
-    // Log response status
-    console.log('Response Status:', response.status);
-
-    // Log response data
-    const responseData = await response.json();
-    console.log('Update Response:', responseData);
-    
-    // Reset form and fetch updated products
-    updateProductForm.reset();
-    fetchProducts();
-  } catch (error) {
-    console.error('Error updating product:', error);
-  }
-});
-
-
-  // Function to delete product
-  deleteProductForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const formData = new FormData(deleteProductForm);
-    const deleteId = formData.get('deleteId');
-    await fetch(`/api/products/${deleteId}`, {
-      method: 'DELETE'
-    });
-    deleteProductForm.reset();
-    fetchProducts();
-  });
-
-  // Fetch products initially
-  fetchProducts();
-});
-</script>
+<script src="scripts.js"></script> <!-- Link to external JavaScript file -->
 
 </body>
 </html>
